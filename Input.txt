@@ -17,5 +17,17 @@ Meeting 4 420Min
 Meeting 5 330Min
 Meeting 6 320Min
 Meeting 7 300Min
+Meeting 8 360Min
+Meeting 9 350Min
 Checking 10Min
 Check Check 5Min
+JEEVA 50Min
+JEEVA2 50Min
+JEEVA3 50Min
+JEEVA4 50Min
+JEEVA5 50Min
+JEEVA6 50Min
+JEEVA7 50Min
+JEEVA8 50Min
+JEEVA9 50Min
+JEEVA10 50Min
