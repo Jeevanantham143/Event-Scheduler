@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.time.Duration;
@@ -26,7 +27,7 @@ public class Main {
 
         ScheduleMeeting();
 
-        System.out.println("*********** Schedule *************");
+        //System.out.println("*********** Schedule *************");
 
         PrintTrackSchedule();
 
@@ -297,7 +298,101 @@ public class Main {
 
         trackSchedule.setTrackList(trackList);
 
-        // 6 Hours to 7 Hours talk scheduling
+        ScheduleSevenHourTalkList(sevenHourTalkList, oneHourTalkList, twoHourTalkList);
+
+        ScheduleMeetingLessThanSevenHours(sixHourTalkList, twoHourTalkList, threeHourTalkList);
+        //System.out.println("********AFTER SIX HOUR SCHEDULE*******");
+        //PrintItems();
+        ScheduleMeetingLessThanSevenHours(fiveHourTalkList, threeHourTalkList, fourHourTalkList);
+        //System.out.println("********AFTER FIVE HOUR SCHEDULE*******");
+        //PrintItems();
+        ScheduleMeetingForFourHourList(fourHourTalkList);
+
+
+    }
+
+
+    public static Talk GetLunchTalk() {
+        Talk lunchTalk = new Talk();
+
+        lunchTalk.setTalkTitle("Lunch");
+        lunchTalk.setTalkTime(60);
+        lunchTalk.setTalkStartTime(LocalTime.NOON);
+        lunchTalk.setTalkEndTime(LocalTime.NOON.plusHours(1));
+        lunchTalk.setTalkType(Talk.TalkType.LUNCH);
+
+        return lunchTalk;
+    }
+
+    public static Talk GetNetworkingEventTalk(LocalTime NetworkSessionStartTime) {
+        Talk lunchTalk = new Talk();
+
+        lunchTalk.setTalkTitle("Network Session");
+        lunchTalk.setTalkTime(60);
+        lunchTalk.setTalkStartTime(NetworkSessionStartTime);
+        lunchTalk.setTalkEndTime(LocalTime.NOON.plusHours(1));
+        lunchTalk.setTalkType(Talk.TalkType.NETWORKING_EVENT);
+
+        return lunchTalk;
+    }
+
+    public static void PrintTrackSchedule() {
+        TrackSchedule trackSchedule = new TrackSchedule();
+        try {
+
+            PrintWriter writer = new PrintWriter("Output.txt", "UTF-8");
+
+            if (trackSchedule.getTrackList() != null && trackSchedule.getTrackList().size() > 0) {
+
+                for (Track track : trackSchedule.getTrackList()) {
+
+                    System.out.println(track.getTrackName() + ":");
+                    writer.println(track.getTrackName() + ":");
+                    if (track.getTalkList() != null && track.getTalkList().size() > 0) {
+                        //System.out.println("Track Size: " + track.getTalkList().size());
+
+                        for (Talk talk : track.getTalkList()) {
+
+                            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a");
+
+                            String talkStartTime = dtf.format(talk.getTalkStartTime());
+                            //String talkEndTime = dtf.format(talk.getTalkEndTime());
+
+                            System.out.println(talkStartTime + " "
+                                    //+ " - " + talkEndTime + ": "
+                                    + talk.getTalkTitle());
+
+                            writer.println(talkStartTime + " " + talk.getTalkTitle());
+                        }
+                        writer.println();
+                    }
+                }
+
+
+
+            } else {
+
+                writer.println("There are no talk titles in Input to schedule the event...!!!");
+                System.out.println("There are no talk titles in Input to schedule the event...!!!");
+            }
+
+            writer.close();
+
+        } catch (Exception ex) {
+            System.out.println("Exception details: " + ex.getMessage());
+        }
+    }
+
+    //Method to schedule meetings in seven hours list
+    private static void ScheduleSevenHourTalkList(List<TalkDetails> sevenHourTalkList, List<TalkDetails> oneHourTalkList, List<TalkDetails> twoHourTalkList) {
+        TrackSchedule trackSchedule = new TrackSchedule();
+        List<Track> trackList = new ArrayList<>();
+
+        if (trackSchedule.getTrackList() != null || trackSchedule.getTrackList().size() > 0) {
+            trackList = trackSchedule.getTrackList();
+        } else {
+            trackSchedule.setTrackList(trackList);
+        }
 
         if (sevenHourTalkList.size() > 0) {
             for (int i = 0; i < sevenHourTalkList.size(); i++) {
@@ -446,345 +541,6 @@ public class Main {
         if (oneHourTalkList.size() > 0) {
             twoHourTalkList.addAll(oneHourTalkList);
             oneHourTalkList.clear();
-        }
-
-        ScheduleMeetingLessThanSevenHours(sixHourTalkList, twoHourTalkList, threeHourTalkList);
-        System.out.println("********AFTER SIX HOUR SCHEDULE*******");
-        //PrintItems();
-        ScheduleMeetingLessThanSevenHours(fiveHourTalkList, threeHourTalkList, fourHourTalkList);
-        System.out.println("********AFTER FIVE HOUR SCHEDULE*******");
-        PrintItems();
-        //ScheduleMeetingLessThanSevenHours(fourHourTalkList, fourHourTalkList, fourHourTalkList);
-        ScheduleMeetingForFourHourList(fourHourTalkList);
-
-
-//        if (sixHourTalkList.size() > 0) {
-//            for (int i = 0; i < sixHourTalkList.size(); i++) {
-//                int talkTime = sixHourTalkList.get(i).getTalkTime();
-//                int availableTime = 420 - talkTime;
-//
-//                Track track = new Track();
-//                List<Talk> talkList = new ArrayList<>();
-//                Talk firstHalfTalk = new Talk();
-//
-//                firstHalfTalk.setTalkTitle(sixHourTalkList.get(i).getTalkTitle());
-//                firstHalfTalk.setTalkTime(sixHourTalkList.get(i).getTalkTime());
-//                firstHalfTalk.setTalkStartTime(LocalTime.MIN.plusHours(9));
-//                firstHalfTalk.setTalkEndTime(LocalTime.NOON);
-//                firstHalfTalk.setTalkType(Talk.TalkType.FIRST_HALF);
-//
-//                Talk lunchTalk = GetLunchTalk();
-//                Talk secondHalfTalk = new Talk();
-//
-//                secondHalfTalk.setTalkTitle(sixHourTalkList.get(i).getTalkTitle());
-//                secondHalfTalk.setTalkTime(sixHourTalkList.get(i).getTalkTime());
-//                secondHalfTalk.setTalkTime(sixHourTalkList.get(i).getTalkTime());
-//                secondHalfTalk.setTalkStartTime(LocalTime.NOON.plusHours(1));
-//                secondHalfTalk.setTalkEndTime(LocalTime.NOON.plusMinutes(300 - availableTime));
-//                secondHalfTalk.setTalkType(Talk.TalkType.SECOND_HALF);
-//
-//                talkList.add(firstHalfTalk);
-//                talkList.add(lunchTalk);
-//                talkList.add(secondHalfTalk);
-//
-//                List<TalkDetails> tempTalk = new ArrayList<>();
-//
-//                while (availableTime > 0) {
-//
-//                    boolean isTalkAvailable = false;
-//
-//                    for (int j = 0; j < twoHourTalkList.size(); j++) {
-//
-//                        if (twoHourTalkList.get(j).getTalkTime() <= availableTime) {
-//                            isTalkAvailable = true;
-//                            tempTalk.add(twoHourTalkList.get(j));
-//                            availableTime -= twoHourTalkList.get(j).getTalkTime();
-//                            twoHourTalkList.remove(j);
-//                            break;
-//                        }
-//                    }
-//
-//                    if (!isTalkAvailable) {
-//                        availableTime = 0;
-//                    }
-//                }
-//
-//                if (tempTalk.size() > 0) {
-//                    for (TalkDetails tempTalkDetails : tempTalk) {
-//
-//                        Talk additionalTalk = new Talk();
-//
-//                        additionalTalk.setTalkTitle(tempTalkDetails.getTalkTitle());
-//                        additionalTalk.setTalkTime(tempTalkDetails.getTalkTime());
-//                        int numberOfTalk = talkList.size();
-//                        LocalTime startTime = talkList.get(numberOfTalk - 1).getTalkEndTime();
-//                        additionalTalk.setTalkStartTime(startTime);
-//                        LocalTime endTime = startTime.plusMinutes(tempTalkDetails.getTalkTime());
-//                        additionalTalk.setTalkEndTime(endTime);
-//                        additionalTalk.setTalkType(Talk.TalkType.SECOND_HALF);
-//
-//                        talkList.add(additionalTalk);
-//
-//                    }
-//                }
-//
-//                int totalTimeOccupied = 0;
-//
-//                for (Talk talk : talkList) {
-//                    if(talk.getTalkType() != Talk.TalkType.LUNCH)
-//                    {
-//                        long timeOfTalk = Duration.between(talk.getTalkStartTime(), talk.getTalkEndTime()).toMinutes();
-//                        totalTimeOccupied += timeOfTalk;
-//                    }
-//
-//                }
-//
-//                System.out.println("totalTimeOccupied: " + totalTimeOccupied);
-//
-//                if (totalTimeOccupied < 360) {
-//
-//                    int timeToPushTalk = 360 - totalTimeOccupied;
-//
-//                    for (Talk talk : talkList) {
-//
-//
-//                        if(talk.getTalkType() == Talk.TalkType.FIRST_HALF)
-//                        {
-//                            talk.setTalkStartTime(talk.getTalkStartTime().plusMinutes(timeToPushTalk));
-//                            if(!talk.getTalkEndTime().equals(LocalTime.NOON)) {
-//                                talk.setTalkEndTime(talk.getTalkEndTime().plusMinutes(timeToPushTalk));
-//                            }
-//                        }
-//                        else if(talk.getTalkType() == Talk.TalkType.SECOND_HALF)
-//                        {
-//                            talk.setTalkEndTime(talk.getTalkEndTime().plusMinutes(timeToPushTalk));
-//                            if(!talk.getTalkStartTime().equals(LocalTime.NOON.plusHours(1)));
-//                            {
-//                                talk.setTalkStartTime(talk.getTalkStartTime().plusMinutes(timeToPushTalk));
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                // Add Networking Event
-//
-//                Talk networkingEventTalk = new Talk();
-//
-//                networkingEventTalk.setTalkTitle("Networking Event");
-//                networkingEventTalk.setTalkTime(60);
-//                int numberOfTalk = talkList.size();
-//                LocalTime startTime = talkList.get(numberOfTalk - 1).getTalkEndTime();
-//                networkingEventTalk.setTalkStartTime(startTime);
-//                LocalTime endTime = startTime.plusMinutes(60);
-//                networkingEventTalk.setTalkEndTime(endTime);
-//                networkingEventTalk.setTalkType(Talk.TalkType.NETWORKING_EVENT);
-//
-//                talkList.add(networkingEventTalk);
-//
-//                int trackNumber = trackSchedule.getTrackList().size() + 1;
-//
-//                track.setTrackName("Track " + trackNumber);
-//                track.setTalkList(talkList);
-//                trackList.add(track);
-//            }
-//        }
-//        sixHourTalkList.clear();
-//
-//
-//        if (twoHourTalkList.size() > 0) {
-//            threeHourTalkList.addAll(twoHourTalkList);
-//            twoHourTalkList.clear();
-//        }
-//
-//        //PrintItems();
-//
-//        // Five Hour and 3 Hour list
-//
-//
-//        if (fiveHourTalkList.size() > 0) {
-//            for (int i = 0; i < fiveHourTalkList.size(); i++) {
-//                int talkTime = fiveHourTalkList.get(i).getTalkTime();
-//                int availableTime = 420 - talkTime;
-//
-//                Track track = new Track();
-//                List<Talk> talkList = new ArrayList<>();
-//                Talk firstHalfTalk = new Talk();
-//
-//                firstHalfTalk.setTalkTitle(fiveHourTalkList.get(i).getTalkTitle());
-//                firstHalfTalk.setTalkTime(fiveHourTalkList.get(i).getTalkTime());
-//                firstHalfTalk.setTalkStartTime(LocalTime.MIN.plusHours(9));
-//                firstHalfTalk.setTalkEndTime(LocalTime.NOON);
-//                firstHalfTalk.setTalkType(Talk.TalkType.FIRST_HALF);
-//
-//                Talk lunchTalk = GetLunchTalk();
-//                Talk secondHalfTalk = new Talk();
-//
-//                secondHalfTalk.setTalkTitle(fiveHourTalkList.get(i).getTalkTitle());
-//                secondHalfTalk.setTalkTime(fiveHourTalkList.get(i).getTalkTime());
-//                secondHalfTalk.setTalkTime(fiveHourTalkList.get(i).getTalkTime());
-//                secondHalfTalk.setTalkStartTime(LocalTime.NOON.plusHours(1));
-//                secondHalfTalk.setTalkEndTime(LocalTime.NOON.plusMinutes(300 - availableTime));
-//                secondHalfTalk.setTalkType(Talk.TalkType.SECOND_HALF);
-//
-//                talkList.add(firstHalfTalk);
-//                talkList.add(lunchTalk);
-//                talkList.add(secondHalfTalk);
-//
-//                List<TalkDetails> tempTalk = new ArrayList<>();
-//
-//                while (availableTime > 0) {
-//
-//                    boolean isTalkAvailable = false;
-//
-//                    for (int j = 0; j < threeHourTalkList.size(); j++) {
-//
-//                        if (threeHourTalkList.get(j).getTalkTime() <= availableTime) {
-//                            isTalkAvailable = true;
-//                            tempTalk.add(threeHourTalkList.get(j));
-//                            availableTime -= threeHourTalkList.get(j).getTalkTime();
-//                            threeHourTalkList.remove(j);
-//                            break;
-//                        }
-//                    }
-//
-//                    if (!isTalkAvailable) {
-//                        availableTime = 0;
-//                    }
-//                }
-//
-//                if (tempTalk.size() > 0) {
-//                    for (TalkDetails tempTalkDetails : tempTalk) {
-//
-//                        Talk additionalTalk = new Talk();
-//
-//                        additionalTalk.setTalkTitle(tempTalkDetails.getTalkTitle());
-//                        additionalTalk.setTalkTime(tempTalkDetails.getTalkTime());
-//                        int numberOfTalk = talkList.size();
-//                        LocalTime startTime = talkList.get(numberOfTalk - 1).getTalkEndTime();
-//                        additionalTalk.setTalkStartTime(startTime);
-//                        LocalTime endTime = startTime.plusMinutes(tempTalkDetails.getTalkTime());
-//                        additionalTalk.setTalkEndTime(endTime);
-//                        additionalTalk.setTalkType(Talk.TalkType.SECOND_HALF);
-//
-//                        talkList.add(additionalTalk);
-//
-//                    }
-//                }
-//
-//                int totalTimeOccupied = 0;
-//
-//                for (Talk talk : talkList) {
-//                    if(talk.getTalkType() != Talk.TalkType.LUNCH)
-//                    {
-//                        long timeOfTalk = Duration.between(talk.getTalkStartTime(), talk.getTalkEndTime()).toMinutes();
-//                        totalTimeOccupied += timeOfTalk;
-//                    }
-//
-//                }
-//
-//                System.out.println("totalTimeOccupied: " + totalTimeOccupied);
-//
-//                if (totalTimeOccupied < 360) {
-//
-//                    int timeToPushTalk = 360 - totalTimeOccupied;
-//
-//                    for (Talk talk : talkList) {
-//
-//
-//                        if(talk.getTalkType() == Talk.TalkType.FIRST_HALF)
-//                        {
-//                            talk.setTalkStartTime(talk.getTalkStartTime().plusMinutes(timeToPushTalk));
-//                            if(!talk.getTalkEndTime().equals(LocalTime.NOON)) {
-//                                talk.setTalkEndTime(talk.getTalkEndTime().plusMinutes(timeToPushTalk));
-//                            }
-//                        }
-//                        else if(talk.getTalkType() == Talk.TalkType.SECOND_HALF)
-//                        {
-//                            talk.setTalkEndTime(talk.getTalkEndTime().plusMinutes(timeToPushTalk));
-//                            if(!talk.getTalkStartTime().equals(LocalTime.NOON.plusHours(1)));
-//                            {
-//                                talk.setTalkStartTime(talk.getTalkStartTime().plusMinutes(timeToPushTalk));
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                // Add Networking Event
-//
-//                Talk networkingEventTalk = new Talk();
-//
-//                networkingEventTalk.setTalkTitle("Networking Event");
-//                networkingEventTalk.setTalkTime(60);
-//                int numberOfTalk = talkList.size();
-//                LocalTime startTime = talkList.get(numberOfTalk - 1).getTalkEndTime();
-//                networkingEventTalk.setTalkStartTime(startTime);
-//                LocalTime endTime = startTime.plusMinutes(60);
-//                networkingEventTalk.setTalkEndTime(endTime);
-//                networkingEventTalk.setTalkType(Talk.TalkType.NETWORKING_EVENT);
-//
-//                talkList.add(networkingEventTalk);
-//
-//                int trackNumber = trackSchedule.getTrackList().size() + 1;
-//
-//                track.setTrackName("Track " + trackNumber);
-//                track.setTalkList(talkList);
-//                trackList.add(track);
-//            }
-//        }
-//
-//        fiveHourTalkList.clear();
-//
-//
-//        if (threeHourTalkList.size() > 0) {
-//            fourHourTalkList.addAll(twoHourTalkList);
-//            threeHourTalkList.clear();
-//        }
-
-        //PrintItems();
-
-
-    }
-
-
-    public static Talk GetLunchTalk() {
-        Talk lunchTalk = new Talk();
-
-        lunchTalk.setTalkTitle("Lunch");
-        lunchTalk.setTalkTime(60);
-        lunchTalk.setTalkStartTime(LocalTime.NOON);
-        lunchTalk.setTalkEndTime(LocalTime.NOON.plusHours(1));
-        lunchTalk.setTalkType(Talk.TalkType.LUNCH);
-
-        return lunchTalk;
-    }
-
-    public static void PrintTrackSchedule() {
-        TrackSchedule trackSchedule = new TrackSchedule();
-        if (trackSchedule.getTrackList() != null && trackSchedule.getTrackList().size() > 0) {
-
-            for (Track track : trackSchedule.getTrackList()) {
-
-                System.out.println(track.getTrackName() + ":");
-                if (track.getTalkList() != null && track.getTalkList().size() > 0) {
-                    //System.out.println("Track Size: " + track.getTalkList().size());
-
-                    for (Talk talk : track.getTalkList()) {
-
-                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a");
-
-                        String talkStartTime = dtf.format(talk.getTalkStartTime());
-                        String talkEndTime = dtf.format(talk.getTalkEndTime());
-
-                        System.out.println(talkStartTime + " "
-                                //+ " - " + talkEndTime + ": "
-                                + talk.getTalkTitle());
-                    }
-
-                }
-
-            }
-        } else {
-            System.out.println("Track schedule is empty");
         }
     }
 
@@ -942,18 +698,27 @@ public class Main {
         List<Track> trackList = new ArrayList<>();
 
         if (trackSchedule.getTrackList() != null || trackSchedule.getTrackList().size() > 0) {
-            trackList = trackSchedule.getTrackList();
-        } else {
-            trackSchedule.setTrackList(trackList);
+            if (trackSchedule.getTrackList() != null || trackSchedule.getTrackList().size() > 0) {
+                trackList = trackSchedule.getTrackList();
+            } else {
+                trackSchedule.setTrackList(trackList);
+            }
         }
+
+        boolean isStillMeetingAvailable = false;
+
+        int totalTalkTimeInFourHourList = 0;
 
 
         if (FourHourTalkList.size() > 0) {
+
+            for (TalkDetails talkDetails : FourHourTalkList) {
+
+                totalTalkTimeInFourHourList += talkDetails.getTalkTime();
+
+            }
+
             for (int i = 0; i < FourHourTalkList.size(); i++) {
-
-
-                System.out.println("Looping Four Hour List "+ i +" and size is" + FourHourTalkList.size());
-                PrintItems();
 
                 int talkTime = FourHourTalkList.get(i).getTalkTime();
                 int availableTime = 420 - talkTime;
@@ -995,17 +760,13 @@ public class Main {
 
                 List<TalkDetails> tempTalk = new ArrayList<>();
 
-                if(FourHourTalkList.size() > 1)
-                {
+                if (FourHourTalkList.size() > 1) {
                     while (availableTime > 0) {
-
-                        System.out.println("Inside WHILE Loop");
 
                         boolean isTalkAvailable = false;
 
                         for (int j = 0; j < FourHourTalkList.size(); j++) {
 
-                            System.out.println("Looping Four Hour List INSIDE "+ j +" and size is" + FourHourTalkList.size());
                             if (FourHourTalkList.get(j).getTalkTime() <= availableTime) {
                                 isTalkAvailable = true;
                                 tempTalk.add(FourHourTalkList.get(j));
@@ -1015,16 +776,11 @@ public class Main {
                             }
                         }
 
-                        System.out.println("Outside FOR Loop size:" + FourHourTalkList.size());
-
                         if (!isTalkAvailable) {
                             availableTime = 0;
                         }
                     }
-
-                    System.out.println("Outside WHILE Loop size:" + FourHourTalkList.size());
                 }
-
 
 
                 if (tempTalk.size() > 0) {
@@ -1098,19 +854,158 @@ public class Main {
                 track.setTrackName("Track " + trackNumber);
                 track.setTalkList(talkList);
                 trackList.add(track);
+
+                if (FourHourTalkList.size() > 0) {
+
+                    totalTalkTimeInFourHourList = 0;
+
+                    for (TalkDetails talkDetails : FourHourTalkList) {
+
+                        totalTalkTimeInFourHourList += talkDetails.getTalkTime();
+                    }
+
+                    if (totalTalkTimeInFourHourList < 420) {
+                        isStillMeetingAvailable = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            System.out.println("There are no talk titles in Input to schedule the event...!!!");
+        }
+
+        // Logic for single track having less than 7 hours of talk
+
+        if (isStillMeetingAvailable) {
+
+            Track track = new Track();
+            List<Talk> talkList = new ArrayList<>();
+
+            List<Talk> tempNoonSessionTalkList = new ArrayList<>();
+            List<Talk> tempMorningSessionTalkList = new ArrayList<>();
+
+            Talk secondHalfTalk = new Talk();
+
+            secondHalfTalk.setTalkTitle(FourHourTalkList.get(0).getTalkTitle());
+            secondHalfTalk.setTalkTime(FourHourTalkList.get(0).getTalkTime());
+            secondHalfTalk.setTalkStartTime(LocalTime.NOON.plusHours(1));
+            secondHalfTalk.setTalkEndTime(LocalTime.NOON.plusHours(1).plusMinutes(FourHourTalkList.get(0).getTalkTime()));
+            secondHalfTalk.setTalkType(Talk.TalkType.SECOND_HALF);
+
+            tempNoonSessionTalkList.add(secondHalfTalk);
+
+            int noonSessionAvailableTime = 240 - FourHourTalkList.get(0).getTalkTime();
+
+            List<TalkDetails> tempSecondHalfTalk = new ArrayList<>();
+
+            FourHourTalkList.remove(0);
+
+
+            for (int j = 0; j < FourHourTalkList.size(); j++) {
+
+                if (FourHourTalkList.get(j).getTalkTime() <= noonSessionAvailableTime) {
+                    tempSecondHalfTalk.add(FourHourTalkList.get(j));
+                    break;
+                }
             }
 
-            System.out.println("Outside MAIN FOR Loop size:" + FourHourTalkList.size());
+            if (tempSecondHalfTalk.size() > 0) {
+
+                for (TalkDetails tempTalkDetails : tempSecondHalfTalk) {
+
+                    FourHourTalkList.remove(0);
+
+                    Talk additionalTalk = new Talk();
+
+                    additionalTalk.setTalkTitle(tempTalkDetails.getTalkTitle());
+                    additionalTalk.setTalkTime(tempTalkDetails.getTalkTime());
+                    int numberOfTalk = tempNoonSessionTalkList.size();
+                    LocalTime startTime = tempNoonSessionTalkList.get(numberOfTalk - 1).getTalkEndTime();
+                    additionalTalk.setTalkStartTime(startTime);
+                    LocalTime endTime = startTime.plusMinutes(tempTalkDetails.getTalkTime());
+                    additionalTalk.setTalkEndTime(endTime);
+                    additionalTalk.setTalkType(Talk.TalkType.SECOND_HALF);
+
+                    tempNoonSessionTalkList.add(additionalTalk);
+
+                }
+            }
+
+            int numberOfNoonTalk = tempNoonSessionTalkList.size();
+            LocalTime networkingEventStartTime = tempNoonSessionTalkList.get(numberOfNoonTalk - 1).getTalkEndTime();
+
+            Talk networkingEventTalk = GetNetworkingEventTalk(networkingEventStartTime);
+            tempNoonSessionTalkList.add(networkingEventTalk);
+
+
+            if (totalTalkTimeInFourHourList > 240) {
+
+                Talk firstHalfTalk = new Talk();
+
+                firstHalfTalk.setTalkTitle(FourHourTalkList.get(0).getTalkTitle());
+                firstHalfTalk.setTalkTime(FourHourTalkList.get(0).getTalkTime());
+                firstHalfTalk.setTalkStartTime(LocalTime.MIN.plusHours(9));
+                firstHalfTalk.setTalkEndTime(LocalTime.MIN.plusHours(9).plusMinutes(FourHourTalkList.get(0).getTalkTime()));
+                firstHalfTalk.setTalkType(Talk.TalkType.FIRST_HALF);
+
+                tempMorningSessionTalkList.add(firstHalfTalk);
+
+                int morningSessionAvailableTime = 180 - FourHourTalkList.get(0).getTalkTime();
+
+                FourHourTalkList.remove(0);
+
+                if (FourHourTalkList.size() > 0) {
+
+                    List<TalkDetails> tempFirstHalfTalk = new ArrayList<>();
+
+                    for (int j = 0; j < FourHourTalkList.size(); j++) {
+                        if (FourHourTalkList.get(j).getTalkTime() <= morningSessionAvailableTime) {
+                            tempFirstHalfTalk.add(FourHourTalkList.get(j));
+                            break;
+                        }
+                    }
+
+                    if (tempFirstHalfTalk.size() > 0) {
+
+                        for (TalkDetails tempTalkDetails : tempFirstHalfTalk) {
+
+                            FourHourTalkList.remove(0);
+
+                            Talk additionalTalk = new Talk();
+
+                            additionalTalk.setTalkTitle(tempTalkDetails.getTalkTitle());
+                            additionalTalk.setTalkTime(tempTalkDetails.getTalkTime());
+                            int numberOfTalk = tempMorningSessionTalkList.size();
+                            LocalTime startTime = tempMorningSessionTalkList.get(numberOfTalk - 1).getTalkEndTime();
+                            additionalTalk.setTalkStartTime(startTime);
+                            LocalTime endTime = startTime.plusMinutes(tempTalkDetails.getTalkTime());
+                            additionalTalk.setTalkEndTime(endTime);
+                            additionalTalk.setTalkType(Talk.TalkType.FIRST_HALF);
+
+                            tempMorningSessionTalkList.add(additionalTalk);
+
+                        }
+                    }
+                }
+
+                Talk lunchTalk = GetLunchTalk();
+
+                talkList.addAll(tempMorningSessionTalkList);
+                talkList.add(lunchTalk);
+
+
+            }
+
+
+            talkList.addAll(tempNoonSessionTalkList);
+
+            int trackNumber = trackSchedule.getTrackList().size() + 1;
+
+            track.setTrackName("Track " + trackNumber);
+            track.setTalkList(talkList);
+            trackList.add(track);
         }
-        //FourHourTalkList.clear();
-
-
-//        if (CompareTalkList.size() > 0) {
-//            NextTalkList.addAll(CompareTalkList);
-//            CompareTalkList.clear();
-//        }
     }
-
 }
 
 class SortByTalkTime implements Comparator<TalkDetails> {
