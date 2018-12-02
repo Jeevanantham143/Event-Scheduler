@@ -76,67 +76,73 @@ public class Main {
                         oneHourTalkList.add(talkDetails);
                     } else if (time.substring(time.length() - 3).toUpperCase().equals("MIN")) {
                         String timeCheck = time.substring(0, time.length() - 3);
-                        talkTime = Integer.parseInt(timeCheck);
 
-                        if (Integer.parseInt(timeCheck) > 420) {
-                            isInvalid = true;
-                        } else if (talkTime > 360 && talkTime <= 420) {
-                            // Add talk details to seven hours list
-                            TalkDetails talkDetails = new TalkDetails();
+                        try {
+                            
+                            talkTime = Integer.parseInt(timeCheck);
 
-                            talkDetails.setTalkTime(talkTime);
-                            talkDetails.setTalkTitle(talkTitle);
+                            if (talkTime > 420) {
+                                isInvalid = true;
+                            } else if (talkTime > 360 && talkTime <= 420) {
+                                // Add talk details to seven hours list
+                                TalkDetails talkDetails = new TalkDetails();
 
-                            sevenHourTalkList.add(talkDetails);
-                        } else if (talkTime > 300 && talkTime <= 360) {
-                            // Add talk details to six hours list
-                            TalkDetails talkDetails = new TalkDetails();
+                                talkDetails.setTalkTime(talkTime);
+                                talkDetails.setTalkTitle(talkTitle);
 
-                            talkDetails.setTalkTime(talkTime);
-                            talkDetails.setTalkTitle(talkTitle);
+                                sevenHourTalkList.add(talkDetails);
+                            } else if (talkTime > 300 && talkTime <= 360) {
+                                // Add talk details to six hours list
+                                TalkDetails talkDetails = new TalkDetails();
 
-                            sixHourTalkList.add(talkDetails);
-                        } else if (talkTime > 240 && talkTime <= 300) {
-                            // Add talk details to five hours list
-                            TalkDetails talkDetails = new TalkDetails();
+                                talkDetails.setTalkTime(talkTime);
+                                talkDetails.setTalkTitle(talkTitle);
 
-                            talkDetails.setTalkTime(talkTime);
-                            talkDetails.setTalkTitle(talkTitle);
+                                sixHourTalkList.add(talkDetails);
+                            } else if (talkTime > 240 && talkTime <= 300) {
+                                // Add talk details to five hours list
+                                TalkDetails talkDetails = new TalkDetails();
 
-                            fiveHourTalkList.add(talkDetails);
-                        } else if (talkTime > 180 && talkTime <= 240) {
-                            // Add talk details to four hours list
-                            TalkDetails talkDetails = new TalkDetails();
+                                talkDetails.setTalkTime(talkTime);
+                                talkDetails.setTalkTitle(talkTitle);
 
-                            talkDetails.setTalkTime(talkTime);
-                            talkDetails.setTalkTitle(talkTitle);
+                                fiveHourTalkList.add(talkDetails);
+                            } else if (talkTime > 180 && talkTime <= 240) {
+                                // Add talk details to four hours list
+                                TalkDetails talkDetails = new TalkDetails();
 
-                            fourHourTalkList.add(talkDetails);
-                        } else if (talkTime > 120 && talkTime <= 180) {
-                            // Add talk details to three hours list
-                            TalkDetails talkDetails = new TalkDetails();
+                                talkDetails.setTalkTime(talkTime);
+                                talkDetails.setTalkTitle(talkTitle);
 
-                            talkDetails.setTalkTime(talkTime);
-                            talkDetails.setTalkTitle(talkTitle);
+                                fourHourTalkList.add(talkDetails);
+                            } else if (talkTime > 120 && talkTime <= 180) {
+                                // Add talk details to three hours list
+                                TalkDetails talkDetails = new TalkDetails();
 
-                            threeHourTalkList.add(talkDetails);
-                        } else if (talkTime > 60 && talkTime <= 120) {
-                            // Add talk details to two hours list
-                            TalkDetails talkDetails = new TalkDetails();
+                                talkDetails.setTalkTime(talkTime);
+                                talkDetails.setTalkTitle(talkTitle);
 
-                            talkDetails.setTalkTime(talkTime);
-                            talkDetails.setTalkTitle(talkTitle);
+                                threeHourTalkList.add(talkDetails);
+                            } else if (talkTime > 60 && talkTime <= 120) {
+                                // Add talk details to two hours list
+                                TalkDetails talkDetails = new TalkDetails();
 
-                            twoHourTalkList.add(talkDetails);
-                        } else if (talkTime <= 60) {
-                            // Add talk details to one hours list
-                            TalkDetails talkDetails = new TalkDetails();
+                                talkDetails.setTalkTime(talkTime);
+                                talkDetails.setTalkTitle(talkTitle);
 
-                            talkDetails.setTalkTime(talkTime);
-                            talkDetails.setTalkTitle(talkTitle);
+                                twoHourTalkList.add(talkDetails);
+                            } else if (talkTime > 0 && talkTime <= 60) {
+                                // Add talk details to one hours list
+                                TalkDetails talkDetails = new TalkDetails();
 
-                            oneHourTalkList.add(talkDetails);
-                        } else {
+                                talkDetails.setTalkTime(talkTime);
+                                talkDetails.setTalkTitle(talkTitle);
+
+                                oneHourTalkList.add(talkDetails);
+                            } else {
+                                isInvalid = true;
+                            }
+                        } catch (Exception ex) {
                             isInvalid = true;
                         }
 
@@ -710,8 +716,6 @@ public class Main {
 
         while (FourHourTalkList.size() > 0) {
 
-            //for (int i = 0; i < FourHourTalkList.size(); i++) {
-
             int secondHalftalkTime = FourHourTalkList.get(0).getTalkTime();
 
 
@@ -920,9 +924,6 @@ public class Main {
             track.setTrackName("Track " + trackNumber);
             track.setTalkList(talkList);
             trackList.add(track);
-//
-//                break;
-//            }
 
             totalTalkTimeInFourHourList = CalculateTotalTalkTime(FourHourTalkList);
             if (totalTalkTimeInFourHourList == 0) {
