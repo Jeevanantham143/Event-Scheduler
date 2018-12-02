@@ -14,20 +14,20 @@ public class Main {
     public static void main(String[] args) {
 
         // Method to read and create the list of talk
-        ReadInputAndCreateTalkList();
+        boolean hasAnyValidTalkTitle = ReadInputAndCreateTalkList();
 
-        // Method to sort the talk title by time in descending order
-        ReadAndSortTalkList();
-
-        // Method to schedule the meeting
-        ScheduleTalkTitles();
-
+        if (hasAnyValidTalkTitle) {
+            // Method to schedule the meeting
+            ScheduleTalkTitles();
+        }
         // Method to print and add the final out to Output.txt file
         PrintTrackSchedule();
     }
 
     // Method to create talk list by hours
-    private static void ReadInputAndCreateTalkList() {
+    private static boolean ReadInputAndCreateTalkList() {
+
+        boolean hasAnyValidTalkTitle = false;
 
         TalkListByHours talkListByHours = new TalkListByHours();
         List<TalkDetails> sevenHourTalkList = new ArrayList<>();
@@ -43,106 +43,152 @@ public class Main {
             BufferedReader in = new BufferedReader(new FileReader("Input.txt"));
             String line;
             while ((line = in.readLine()) != null) {
-                boolean isInvalid = false;
-                String time = line.substring(line.lastIndexOf(" ") + 1);
 
-                String talkTitle = line.substring(0, line.lastIndexOf(" "));
-                int talkTime;
+                line = line.trim();
 
-                if (time.toUpperCase().equals("LIGHTNING")) {
-                    talkTime = 5;
+                if (!line.equals(null) && !line.equals("")) {
 
-                    TalkDetails talkDetails = new TalkDetails();
+                    boolean isInvalid = false;
 
-                    talkDetails.setTalkTime(talkTime);
-                    talkDetails.setTalkTitle(talkTitle);
+                    String time = line.substring(line.lastIndexOf(" ") + 1);
 
-                    oneHourTalkList.add(talkDetails);
-                } else if (time.substring(time.length() - 3).toUpperCase().equals("MIN")) {
-                    String timeCheck = time.substring(0, time.length() - 3);
-                    talkTime = Integer.parseInt(timeCheck);
+                    String talkTitle;
 
-                    if (Integer.parseInt(timeCheck) > 420) {
-                        isInvalid = true;
-                    } else if (talkTime > 360 && talkTime <= 420) {
-                        // Add talk details to seven hours list
-                        TalkDetails talkDetails = new TalkDetails();
+                    int index = line.lastIndexOf(" ");
 
-                        talkDetails.setTalkTime(talkTime);
-                        talkDetails.setTalkTitle(talkTitle);
+                    if (index > 0) {
+                        talkTitle = line.substring(0, index);
+                    } else {
+                        talkTitle = line;
+                    }
 
-                        sevenHourTalkList.add(talkDetails);
-                    } else if (talkTime > 300 && talkTime <= 360) {
-                        // Add talk details to six hours list
-                        TalkDetails talkDetails = new TalkDetails();
 
-                        talkDetails.setTalkTime(talkTime);
-                        talkDetails.setTalkTitle(talkTitle);
+                    int talkTime;
 
-                        sixHourTalkList.add(talkDetails);
-                    } else if (talkTime > 240 && talkTime <= 300) {
-                        // Add talk details to five hours list
-                        TalkDetails talkDetails = new TalkDetails();
+                    if (time.toUpperCase().equals("LIGHTNING")) {
+                        talkTime = 5;
 
-                        talkDetails.setTalkTime(talkTime);
-                        talkDetails.setTalkTitle(talkTitle);
-
-                        fiveHourTalkList.add(talkDetails);
-                    } else if (talkTime > 180 && talkTime <= 240) {
-                        // Add talk details to four hours list
-                        TalkDetails talkDetails = new TalkDetails();
-
-                        talkDetails.setTalkTime(talkTime);
-                        talkDetails.setTalkTitle(talkTitle);
-
-                        fourHourTalkList.add(talkDetails);
-                    } else if (talkTime > 120 && talkTime <= 180) {
-                        // Add talk details to three hours list
-                        TalkDetails talkDetails = new TalkDetails();
-
-                        talkDetails.setTalkTime(talkTime);
-                        talkDetails.setTalkTitle(talkTitle);
-
-                        threeHourTalkList.add(talkDetails);
-                    } else if (talkTime > 60 && talkTime <= 120) {
-                        // Add talk details to two hours list
-                        TalkDetails talkDetails = new TalkDetails();
-
-                        talkDetails.setTalkTime(talkTime);
-                        talkDetails.setTalkTitle(talkTitle);
-
-                        twoHourTalkList.add(talkDetails);
-                    } else if (talkTime <= 60) {
-                        // Add talk details to one hours list
                         TalkDetails talkDetails = new TalkDetails();
 
                         talkDetails.setTalkTime(talkTime);
                         talkDetails.setTalkTitle(talkTitle);
 
                         oneHourTalkList.add(talkDetails);
+                    } else if (time.substring(time.length() - 3).toUpperCase().equals("MIN")) {
+                        String timeCheck = time.substring(0, time.length() - 3);
+                        talkTime = Integer.parseInt(timeCheck);
+
+                        if (Integer.parseInt(timeCheck) > 420) {
+                            isInvalid = true;
+                        } else if (talkTime > 360 && talkTime <= 420) {
+                            // Add talk details to seven hours list
+                            TalkDetails talkDetails = new TalkDetails();
+
+                            talkDetails.setTalkTime(talkTime);
+                            talkDetails.setTalkTitle(talkTitle);
+
+                            sevenHourTalkList.add(talkDetails);
+                        } else if (talkTime > 300 && talkTime <= 360) {
+                            // Add talk details to six hours list
+                            TalkDetails talkDetails = new TalkDetails();
+
+                            talkDetails.setTalkTime(talkTime);
+                            talkDetails.setTalkTitle(talkTitle);
+
+                            sixHourTalkList.add(talkDetails);
+                        } else if (talkTime > 240 && talkTime <= 300) {
+                            // Add talk details to five hours list
+                            TalkDetails talkDetails = new TalkDetails();
+
+                            talkDetails.setTalkTime(talkTime);
+                            talkDetails.setTalkTitle(talkTitle);
+
+                            fiveHourTalkList.add(talkDetails);
+                        } else if (talkTime > 180 && talkTime <= 240) {
+                            // Add talk details to four hours list
+                            TalkDetails talkDetails = new TalkDetails();
+
+                            talkDetails.setTalkTime(talkTime);
+                            talkDetails.setTalkTitle(talkTitle);
+
+                            fourHourTalkList.add(talkDetails);
+                        } else if (talkTime > 120 && talkTime <= 180) {
+                            // Add talk details to three hours list
+                            TalkDetails talkDetails = new TalkDetails();
+
+                            talkDetails.setTalkTime(talkTime);
+                            talkDetails.setTalkTitle(talkTitle);
+
+                            threeHourTalkList.add(talkDetails);
+                        } else if (talkTime > 60 && talkTime <= 120) {
+                            // Add talk details to two hours list
+                            TalkDetails talkDetails = new TalkDetails();
+
+                            talkDetails.setTalkTime(talkTime);
+                            talkDetails.setTalkTitle(talkTitle);
+
+                            twoHourTalkList.add(talkDetails);
+                        } else if (talkTime <= 60) {
+                            // Add talk details to one hours list
+                            TalkDetails talkDetails = new TalkDetails();
+
+                            talkDetails.setTalkTime(talkTime);
+                            talkDetails.setTalkTitle(talkTitle);
+
+                            oneHourTalkList.add(talkDetails);
+                        } else {
+                            isInvalid = true;
+                        }
+
                     } else {
                         isInvalid = true;
                     }
 
-                } else {
-                    isInvalid = true;
-                }
+                    if (isInvalid) {
+                        // Add talk details to invalid talk list
+                        invalidTalkList.add(line);
 
-                if (isInvalid) {
-                    // Add talk details to invalid talk list
-                    invalidTalkList.add(line);
-
+                    }
                 }
             }
             in.close();
 
-            talkListByHours.setTalkListOf1Hour(oneHourTalkList);
-            talkListByHours.setTalkListOf2Hours(twoHourTalkList);
-            talkListByHours.setTalkListOf3Hours(threeHourTalkList);
-            talkListByHours.setTalkListOf4Hours(fourHourTalkList);
-            talkListByHours.setTalkListOf5Hours(fiveHourTalkList);
-            talkListByHours.setTalkListOf6Hours(sixHourTalkList);
+            if (sevenHourTalkList.size() > 0) {
+                hasAnyValidTalkTitle = true;
+                Collections.sort(sevenHourTalkList, new SortByTalkTime());
+            }
+            if (sixHourTalkList.size() > 0) {
+                hasAnyValidTalkTitle = true;
+                Collections.sort(sixHourTalkList, new SortByTalkTime());
+            }
+            if (fiveHourTalkList.size() > 0) {
+                hasAnyValidTalkTitle = true;
+                Collections.sort(fiveHourTalkList, new SortByTalkTime());
+            }
+            if (fourHourTalkList.size() > 0) {
+                hasAnyValidTalkTitle = true;
+                Collections.sort(fourHourTalkList, new SortByTalkTime());
+            }
+            if (threeHourTalkList.size() > 0) {
+                hasAnyValidTalkTitle = true;
+                Collections.sort(threeHourTalkList, new SortByTalkTime());
+            }
+            if (twoHourTalkList.size() > 0) {
+                hasAnyValidTalkTitle = true;
+                Collections.sort(twoHourTalkList, new SortByTalkTime());
+            }
+            if (oneHourTalkList.size() > 0) {
+                hasAnyValidTalkTitle = true;
+                Collections.sort(oneHourTalkList, new SortByTalkTime());
+            }
+
             talkListByHours.setTalkListOf7Hours(sevenHourTalkList);
+            talkListByHours.setTalkListOf6Hours(sixHourTalkList);
+            talkListByHours.setTalkListOf5Hours(fiveHourTalkList);
+            talkListByHours.setTalkListOf4Hours(fourHourTalkList);
+            talkListByHours.setTalkListOf3Hours(threeHourTalkList);
+            talkListByHours.setTalkListOf2Hours(twoHourTalkList);
+            talkListByHours.setTalkListOf1Hour(oneHourTalkList);
 
             if (invalidTalkList.size() > 0) {
                 PrintWriter writer = new PrintWriter("Invalid_Input.txt", "UTF-8");
@@ -156,41 +202,8 @@ public class Main {
             System.out.println("Exception details: " + ex.getMessage());
 
         }
-    }
 
-    // Method to sort the talk titles by hours in descending order
-    private static void ReadAndSortTalkList() {
-        TalkListByHours talkListByHours = new TalkListByHours();
-
-        List<TalkDetails> sevenHourTalkList = talkListByHours.getTalkListOf7Hours();
-        List<TalkDetails> sixHourTalkList = talkListByHours.getTalkListOf6Hours();
-        List<TalkDetails> fiveHourTalkList = talkListByHours.getTalkListOf5Hours();
-        List<TalkDetails> fourHourTalkList = talkListByHours.getTalkListOf4Hours();
-        List<TalkDetails> threeHourTalkList = talkListByHours.getTalkListOf3Hours();
-        List<TalkDetails> twoHourTalkList = talkListByHours.getTalkListOf2Hours();
-        List<TalkDetails> oneHourTalkList = talkListByHours.getTalkListOf1Hour();
-
-        if (sevenHourTalkList.size() > 0) {
-            Collections.sort(sevenHourTalkList, new SortByTalkTime());
-        }
-        if (sixHourTalkList.size() > 0) {
-            Collections.sort(sixHourTalkList, new SortByTalkTime());
-        }
-        if (fiveHourTalkList.size() > 0) {
-            Collections.sort(fiveHourTalkList, new SortByTalkTime());
-        }
-        if (fourHourTalkList.size() > 0) {
-            Collections.sort(fourHourTalkList, new SortByTalkTime());
-        }
-        if (threeHourTalkList.size() > 0) {
-            Collections.sort(threeHourTalkList, new SortByTalkTime());
-        }
-        if (twoHourTalkList.size() > 0) {
-            Collections.sort(twoHourTalkList, new SortByTalkTime());
-        }
-        if (oneHourTalkList.size() > 0) {
-            Collections.sort(oneHourTalkList, new SortByTalkTime());
-        }
+        return hasAnyValidTalkTitle;
     }
 
     // Method to print all the items in talk list
@@ -205,7 +218,7 @@ public class Main {
         List<TalkDetails> twoHourTalkList = talkListByHours.getTalkListOf2Hours();
         List<TalkDetails> oneHourTalkList = talkListByHours.getTalkListOf1Hour();
 
-        if (sevenHourTalkList.size() > 0) {
+        if (sevenHourTalkList != null && sevenHourTalkList.size() > 0) {
             System.out.println("--- 7 Hour List ---");
             System.out.println("Size: " + sevenHourTalkList.size());
             for (int i = 0; i < sevenHourTalkList.size(); i++) {
@@ -215,7 +228,7 @@ public class Main {
             }
         }
 
-        if (sixHourTalkList.size() > 0) {
+        if (sixHourTalkList != null && sixHourTalkList.size() > 0) {
             System.out.println("--- 6 Hour List ---");
             System.out.println("Size: " + sixHourTalkList.size());
             for (int i = 0; i < sixHourTalkList.size(); i++) {
@@ -225,7 +238,7 @@ public class Main {
             }
         }
 
-        if (fiveHourTalkList.size() > 0) {
+        if (fiveHourTalkList != null && fiveHourTalkList.size() > 0) {
             System.out.println("--- 5 Hour List ---");
             System.out.println("Size: " + fiveHourTalkList.size());
             for (int i = 0; i < fiveHourTalkList.size(); i++) {
@@ -235,7 +248,7 @@ public class Main {
             }
         }
 
-        if (fourHourTalkList.size() > 0) {
+        if (fourHourTalkList != null && fourHourTalkList.size() > 0) {
             System.out.println("--- 4 Hour List ---");
             System.out.println("Size: " + fourHourTalkList.size());
             for (int i = 0; i < fourHourTalkList.size(); i++) {
@@ -245,7 +258,7 @@ public class Main {
             }
         }
 
-        if (threeHourTalkList.size() > 0) {
+        if (threeHourTalkList != null && threeHourTalkList.size() > 0) {
             System.out.println("--- 3 Hour List ---");
             System.out.println("Size: " + threeHourTalkList.size());
             for (int i = 0; i < threeHourTalkList.size(); i++) {
@@ -255,7 +268,7 @@ public class Main {
             }
         }
 
-        if (twoHourTalkList.size() > 0) {
+        if (twoHourTalkList != null && twoHourTalkList.size() > 0) {
             System.out.println("--- 2 Hour List ---");
             System.out.println("Size: " + twoHourTalkList.size());
             for (int i = 0; i < twoHourTalkList.size(); i++) {
@@ -265,7 +278,7 @@ public class Main {
             }
         }
 
-        if (oneHourTalkList.size() > 0) {
+        if (oneHourTalkList != null && oneHourTalkList.size() > 0) {
             System.out.println("--- 1 Hour List ---");
             System.out.println("Size: " + oneHourTalkList.size());
             for (int i = 0; i < oneHourTalkList.size(); i++) {
