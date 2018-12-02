@@ -78,10 +78,10 @@ public class Main {
                         String timeCheck = time.substring(0, time.length() - 3);
 
                         try {
-                            
+
                             talkTime = Integer.parseInt(timeCheck);
 
-                            if (talkTime > 420) {
+                            if (talkTime > 420 || talkTime <=0) {
                                 isInvalid = true;
                             } else if (talkTime > 360 && talkTime <= 420) {
                                 // Add talk details to seven hours list
@@ -131,7 +131,7 @@ public class Main {
                                 talkDetails.setTalkTitle(talkTitle);
 
                                 twoHourTalkList.add(talkDetails);
-                            } else if (talkTime > 0 && talkTime <= 60) {
+                            } else if (talkTime > 0) {
                                 // Add talk details to one hours list
                                 TalkDetails talkDetails = new TalkDetails();
 
