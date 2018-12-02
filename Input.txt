@@ -1,33 +1,9 @@
-Meeting with A 10min
-Meeting with B 40min
-Meeting with C 35min
-Meeting with D 10min
-Lightning Meeting lightning
-Amount checking 240Min
-Account checking 250Min
-sjhwioweio weionweiowejo opienopwecnwep
-Test task 130Min
-Testing task 135Min
-sjknfweiofw eofhioefjhwefio oiwehfweiofhwioefh weio oihfe iowfhwe io 700min
-sjknfweiofw eofhioefjhwefio oiwehfweiofhwioefh 700minutes
-Meeting 1 400Min
-Meeting 2 410Min
-Meeting 3 420Min
-Meeting 4 420Min
-Meeting 5 330Min
-Meeting 6 320Min
-Meeting 7 300Min
-Meeting 8 360Min
-Meeting 9 350Min
-Checking 10Min
-Check Check 5Min
-JEEVA 50Min
-JEEVA2 50Min
-JEEVA3 50Min
-JEEVA4 50Min
-JEEVA5 50Min
-JEEVA6 50Min
-JEEVA7 50Min
-JEEVA8 50Min
-JEEVA9 50Min
-JEEVA10 50Min
+Meeting 1 200Min
+Meeting 2 300Min
+Meeting 3 200Min
+Meeting 4 200Min
+Meeting 5 180Min
+Meeting 6 180Min
+Meeting 7 180Min
+Meeting 8 180Min
+Meeting 9 5Min
