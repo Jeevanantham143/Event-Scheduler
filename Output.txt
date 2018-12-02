@@ -1,5 +1,27 @@
 Track 1:
-03:43 PM albert 23
-03:55 PM jeeva 5
-04:00 PM Networking Event
+09:00 AM Ruby on Rails Legacy App Maintenance
+10:00 AM Overdoing it in Python
+10:45 AM Ruby Errors from Mismatched Gem Versions
+11:30 AM Lua for the Masses
+12:00 PM Lunch
+01:00 PM Writing Fast Tests Against Enterprise Rails
+02:00 PM Communicating Over Distance
+03:00 PM Rails Magic
+04:00 PM Ruby on Rails: Why We Should Move On
+05:00 PM Networking Event
+
+Track 2:
+09:55 AM Programming in the Boondocks of Seattle
+10:25 AM Ruby vs. Clojure for Back-End Development
+10:55 AM A World Without HackerNews
+11:25 AM User Interface CSS in Rails Apps
+11:55 AM Rails for Python Developers
+12:00 PM Lunch
+01:00 PM Common Ruby Errors
+01:45 PM Accounting-Driven Development
+02:30 PM Pair Programming vs Noise
+03:15 PM Clojure Ate Scala (on my project)
+04:00 PM Woah
+04:30 PM Sit Down and Write
+05:00 PM Networking Event
 
